@@ -1,0 +1,46 @@
+# LiteLLM gateway for Claude Code: free-tier providers behind one Anthropic-compatible endpoint.
+# Keys are read from environment variables (os.environ/...). No secrets live in this file.
+# Start with: ../start-litellm.sh   (serves http://127.0.0.1:4000)
+model_list:
+  # Claude Code "sonnet" slot (default workhorse) -> NVIDIA NIM free tier, DeepSeek V4 Flash
+  - model_name: claude-sonnet-slot
+    litellm_params:
+      model: openai/deepseek-ai/deepseek-v4-flash
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: os.environ/NVIDIA_API_KEY
+  # Claude Code "opus" slot (hard reasoning) -> NVIDIA NIM free tier, DeepSeek V4 Pro
+  - model_name: claude-opus-slot
+    litellm_params:
+      model: openai/deepseek-ai/deepseek-v4-pro
+      api_base: https://integrate.api.nvidia.com/v1
+      api_key: os.environ/NVIDIA_API_KEY
+  # Claude Code "haiku" slot (background / cheap tasks) -> Groq free tier
+  - model_name: claude-haiku-slot
+    litellm_params:
+      model: groq/llama-3.1-8b-instant
+      api_key: os.environ/GROQ_API_KEY
+  # Long-context alias -> Google AI Studio free tier (Gemini Flash, ~1M context)
+  - model_name: gemini-flash-longctx
+    litellm_params:
+      model: gemini/gemini-2.5-flash
+      api_key: os.environ/GEMINI_API_KEY
+  # Fallback alias -> OpenRouter free-model router ($0 models, 50 req/day)
+  - model_name: openrouter-free
+    litellm_params:
+      model: openrouter/openrouter/free
+      api_key: os.environ/OPENROUTER_API_KEY
+  # Evaluation alias -> GitHub Models free tier (needs a PAT with models:read)
+  - model_name: github-gpt-4o
+    litellm_params:
+      model: openai/openai/gpt-4o
+      api_base: https://models.github.ai/inference
+      api_key: os.environ/GITHUB_MODELS_TOKEN
+
+litellm_settings:
+  drop_params: true
+
+general_settings:
+  # Local gateway key for Claude Code (ANTHROPIC_AUTH_TOKEN). Set LITELLM_MASTER_KEY in your env;
+  # any long random string works. It never leaves this machine.
+  master_key: os.environ/LITELLM_MASTER_KEY
+  disable_spend_logs: true
