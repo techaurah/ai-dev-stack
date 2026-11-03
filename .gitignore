@@ -1,0 +1,18 @@
+# Secrets and local state: never commit these
+.env
+.gateway-key
+.gateway.pid
+gateway.log
+
+# Toolchains created by install.sh
+.venv-litellm/
+node_modules/
+
+# HyperFrames: vendored at install time, renders and temp files
+hyperframes/*/assets/gsap.min.js
+hyperframes/*/renders/
+hyperframes/*/.tmp/
+hyperframes/*/.hyperframes/
+
+# OS noise
+.DS_Store
